@@ -1,6 +1,6 @@
 // MaxHeap se encarga de gestionar las órdenes de compra con prioridad en el precio más alto.
 
-class MaxHeap {
+export class MaxHeap {
     public heap: { precio: number; cantidad: number; empresa: string }[];
     private n: number; // cantidad de elementos ingresados
 
@@ -40,6 +40,9 @@ class MaxHeap {
     }
 
     private resize(newSize: number): void {
+        if (newSize <= 0) {
+            throw new RangeError('Invalid array length');
+        }
         const newHeap: { precio: number; cantidad: number; empresa: string }[] = new Array(newSize);
         for (let i = 1; i < this.heap.length; i++) {
             newHeap[i] = this.heap[i];
