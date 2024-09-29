@@ -1,4 +1,4 @@
-class RegistroTransacciones {
+export class RegistroTransacciones {
     private transacciones: string[] = [];
 
     registrar(empresa: string, cantidad: number, precio: number, comprador: string, vendedor: string): void {
