@@ -1,6 +1,6 @@
 // MinHeap se encarga de gestionar las órdenes de venta con prioridad en el precio más bajo.
 
-class MinHeap {
+export class MinHeap {
     public heap: { precio: number; cantidad: number; empresa: string }[];
     private n: number;
 
@@ -40,10 +40,36 @@ class MinHeap {
     }
 
     private resize(newSize: number): void {
+        if (newSize <= 0) {
+            throw new RangeError('Invalid array length');
+        }
         const newHeap: { precio: number; cantidad: number; empresa: string }[] = new Array(newSize);
         for (let i = 1; i < this.heap.length; i++) {
             newHeap[i] = this.heap[i];
         }
         this.heap = newHeap;
     }
+
+
+    public getMin(): { precio: number; cantidad: number; empresa: string } | undefined {
+        const min = this.heap[1];
+        this.heap[1] = this.heap[this.n];
+        this.n--;
+        this.sink(1);
+        return min;
+    }
+
+    private sink(i: number): void {
+        while (2 * i <= this.n) {
+            let j = 2 * i;
+            if (j < this.n && this.heap[j].precio > this.heap[j + 1].precio) {
+                j++;
+            }
+            if (this.heap[i].precio <= this.heap[j].precio) break;
+            [this.heap[i], this.heap[j]] = [this.heap[j], this.heap[i]];
+            i = j;
+        }
+    }
 }
+
+
