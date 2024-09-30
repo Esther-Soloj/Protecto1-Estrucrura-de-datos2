@@ -23,10 +23,10 @@ class SimuladorMercado {
         }
     }
 
-    agregarOrdenCompra(precio: number, cantidad: number, empresa: string) {
+    agregarOrdenCompra(precio: number, cantidad: number, empresa: string, comprador: string) {
         try {
             this.validarOrden(precio, cantidad);
-            this.monticuloCompras.insert({ precio, cantidad, empresa });
+            this.monticuloCompras.insert({ precio, cantidad, empresa, comprador});
         } catch (error) {
             if (error instanceof InvalidOrderError) {
                 console.error(`Error al agregar orden de compra: ${error.message}`);
@@ -36,10 +36,10 @@ class SimuladorMercado {
         }
     }
 
-    agregarOrdenVenta(precio: number, cantidad: number, empresa: string) {
+    agregarOrdenVenta(precio: number, cantidad: number, empresa: string, vendedor: string) {
         try {
             this.validarOrden(precio, cantidad);
-            this.monticuloVentas.insert({ precio, cantidad, empresa });
+            this.monticuloVentas.insert({ precio, cantidad, empresa , vendedor});
         } catch (error) {
             if (error instanceof InvalidOrderError) {
                 console.error(`Error al agregar orden de venta: ${error.message}`);
@@ -63,14 +63,13 @@ class SimuladorMercado {
                         mejorCompra.empresa,
                         cantidadTransaccion,
                         precioTransaccion,
-                        'Comprador X',
-                        'Vendedor Y'
+                        mejorCompra.comprador, // nombre de comprador
+                        mejorVenta.vendedor     //nombre del vendedor
                     );
                     console.log(`Transacción: ${cantidadTransaccion} acciones de ${mejorCompra.empresa} a ${precioTransaccion} por acción.`);
-
-
                 }
     
+                // Ajuste de cantidades y reinsertar si no se completaron
                 mejorCompra.cantidad -= cantidadTransaccion;
                 mejorVenta.cantidad -= cantidadTransaccion;
     
@@ -89,6 +88,7 @@ class SimuladorMercado {
             console.error('Error durante el emparejamiento de órdenes:', error);
         }
     }
+    
 
     mostrarHistorial(): void {
         console.log('Historial de transacciones:');
@@ -103,11 +103,13 @@ class SimuladorMercado {
 
 //uso
 const simulador = new SimuladorMercado();
-// precio , cantidad, empresa
-simulador.agregarOrdenCompra(100, 50, 'Empresa1');
-simulador.agregarOrdenVenta(90, 30, 'Empresa1');
-simulador.agregarOrdenCompra(105, 25, 'Empresa1');
-simulador.agregarOrdenVenta(80, 20, 'Empresa1');
+// precio , cantidad, empresa, nombre de vendedor o comprador
+simulador.agregarOrdenCompra(100, 50, 'Empresa1',' Juan');
+simulador.agregarOrdenVenta(90, 30, 'Empresa1', 'Maria');
+simulador.agregarOrdenCompra(105, 25, 'Empresa1', 'pedro');
+simulador.agregarOrdenVenta(80, 20, 'Empresa1', 'lucia');
+//simulador.agregarOrdenCompra(75, 60, 'Empresa1', 'esther');
+//simulador.agregarOrdenVenta(65, 90, 'Empresa1', 'rosa');
 
 simulador.mostrarEstado();
 simulador.emparejarOrdenes();  // Empareja y registra transacciones
